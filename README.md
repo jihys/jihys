@@ -51,7 +51,7 @@ Hints
 
 보상 함수는 행동 결과의 품질을 평가하고 그에 따라 보상합니다. 보상은 훈련 중, 각 행동이 취해진 후에 시뮬레이션에서 계산됩니다. Python 3 구문을 사용하여 보상 함수에 들어갈 로직을 설계 합니다. 이 논리를 코드화 하기 위해 시뮬레이션에서 제공하는 여러 가지 측정 값을 변수로 사용 할 수 있습니다. 
 
-다음 목록에는 보상 함수에 사용할 수 있는 변수가 들어 있습니다. 저희 AWS가 자율 주향을 더 잘 수행 할 수있는 방법을 찾기 때문에 수시로 업데이트 됩니다. 따라서 보상 함수를 이에 따라 적절히 조정하십시오. Santa Clara 워크럇에서는 아래 변수와 설명은 현재 사용 가능한 AWS DeepRacer AWS 콘솔의 올바른 내용입니다. 따라서 AWS DeepRacer 서비스에서 볼 수 있는 설명을 무시하고 아래 변수 이름과 설명을 사용하십시오. 가장 두드러진 차이점은 Throttle과 Steering 입니다.
+다음 목록에는 보상 함수에 사용할 수 있는 변수가 들어 있습니다. 아래 변수는 더 좋은 방법이 있을 경우 이를 반영하여 수시로 업데이트 됩니다. 따라서 보상 함수를 이에 따라 적절히 조정하십시오. Seoul 워크샾에서는 아래 변수와 설명은 AWS DeepRacer 콘솔에서 현재 사용 가능한 버전입니다. 따라서 AWS DeepRacer 서비스에서 간혹 다르게 설명 되어 있다면 이를 무시하고 아래 변수 이름과 설명을 사용하십시오. 가장 두드러진 차이점은 Throttle과 Steering 입니다.
 
 | 변수 이름	            | 타입                     | 설명                                                                                                                                                                                                                                                                                         |
 |----------------------|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -68,7 +68,7 @@ Hints
 | waypoints            | List                     | Ordered list of waypoints along the center of the track, each item containing the (x, y) coordinates of the waypoint. The list starts at zero                                                                                                                                                        |
 | closest_waypoint     | Integer                  | Index of the closest waypoint, as measured by straight-line distance. This waypoint can be behind or in-front of the car.                                                                                                                                                                           |
 
-Here is a visual explanation of some of the reward function parameters.
+보상 함수의 매개 변수에 대한 시각적 설명입니다.
 
 ![rewardparams](img/reward_function_parameters_illustration.png)
 
