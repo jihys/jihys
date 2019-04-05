@@ -81,6 +81,7 @@ Hints
 아래에서는 보상 함수 몇 가지를 예제를 제공합니다.
 
 **Example 1**: 중심선을 따라가도록 장려하는 보상 함수. 
+
 여기에서는 먼저 3 개의 마커를 사용하여 트랙 주위에 3 개의 밴드를 만든 다음 중간 또는 넓은 밴드가 아닌 좁은 밴드에서 주행 했을 경우 더 많은 보상을 합니다. 보상의 크기 차이에 유의하십시오. 우리는 좁은 밴드에 머무를 때 1, 중간 밴드에 머무를 때 0.5, 넓은 밴드에 머무를 때 0.1의 보상을 제공합니다. 좁은 밴드에 대한 보상을 줄이거나 중간 대역에 대한 보상을 높이면 본질적으로 차량이 트랙의 넚은 면을 사용하도록 유도합니다. 이것은 특히 날카로운 모서리가있을 때 편리 할 수 있습니다.
 
 	def reward_function(on_track, x, y, distance_from_center, car_orientation, progress, steps, throttle, steering, track_width, waypoints, closest_waypoint):
@@ -100,9 +101,9 @@ Hints
 		return float(reward)
         
 
-Hint: Don't provide rewards equal to zero. The specific optimizer that we are using struggles when the reward given is zero. As such we initialize the reward with a small value. 
+Hint: 보상을 0으로 제공하지 마십시오. 주어진 보상이 0 일 때 우리가 사용하고있는 특정 최적화 도구가 어려움을 겪습니다. 따라서 우리는 보상을 작은 값으로 초기화합니다
 
-**Example 2**:Advanced reward function that penalizes excessive steering and promotes centerline following.
+**Example 2**:과도한 조향을 처벌하고 중심선을 따라 가도록 유도하는 고급 보상 함수.
 
 
 	def reward_function(on_track, x, y, distance_from_center, car_orientation, progress, steps, throttle, steering, track_width, waypoints, closest_waypoint):
@@ -131,7 +132,7 @@ Hint: Don't provide rewards equal to zero. The specific optimizer that we are us
 
 		return float(reward)        
 
-**Example 3**:Advanced reward function that penalizes going slow and promotes centerline following.
+**Example 3**:천천히가는 것에 불이익을주고 중심선을 따라가도록 유도하는 고급 보상 함수.
 
 
 	def reward_function(on_track, x, y, distance_from_center, car_orientation, progress, steps, throttle, steering, track_width, waypoints, closest_waypoint):
@@ -161,19 +162,18 @@ Hint: Don't provide rewards equal to zero. The specific optimizer that we are us
 
 		return float(reward)
 
-Using the above examples you can now proceed to craft your own reward function. Here are a few other tips:
+이제 위 예제를 사용하여, 보상 함수를 개발 해 봅니다. 다음은 몇 가지 추가 Tip 입니다:
+- waypoints 를 사용하여 한 waypoint 에서 다음waypoint 방향을 계산할 수 있습니다.
+- 2D 게임의 right-hand rule 을 사용하여 현재 트랙의 어느쪽에 있는지 확인할 수 있습니다
+- 보상을 기하 급수로 조정할 수 있으나 최대 10,000으로 제한하십시오.
+- 보상 함수에서 throttle 과 steering을 사용할 때 Action Space를 염두에 두십시오
+- 파이선에서 degree를 radians로 변환하기 위해서 math.radians를 import하고 math.radians(원하는 각도)를 사용합니다
+- 자동차가 완주 할 경우의 episode를 로그에서 추적하려면 Finish 보너스 (일명 rewards + = 10000)을 부여하는 것이 고려해 볼 수 있습니다. 자동차가  완주 하더라도 더 100%이상 진전이 없지만, 시뮬레이션은 계속 진행이 될것입니다. 이 모델은 Stop time에 도달 할 때까지 계속 훈련 하게 됩니다. 하지만 최종 모델이 더 한다고 하여 최고의 모델이라는 것을 의미하지는 않습니다. 특히 현실 세계에서의 레이싱과 관련해서는 그렇습니다. 이것은 우리가 앞으로 해결해야할 임시 방법입니다.
 
-- You can use the waypoints to calculate the direction from one waypoint to the next.
-- You can use the right-hand rule from 2D gaming to determine on which side of the track you are on.
-- You can scale rewards exponentially, just cap them at 10,000.
-- Keep your action space in mind when using throttle and steering in your reward function
-- To go from degrees to radians in python import math and then use math.radians(the degrees you want)
-- To keep track of episodes in the logs where your car manages to complete a lap, consider giving a finish bonus (aka reward += 10000) where progress = 100. This is because once the car completes a lap progress will not go beyond 100%, but the simulation will continue. The model will keep on training until it reaches the stopping time, but that does not imply the final model is the best model, especially when it comes to racing in the real world. This is a temporary workaround as we will solve.
+보상 함수를 만들고 나면 ** Validate ** 버튼을 사용하여 교육을 시작하기 전에 코드 구문이 올바른지 확인하십시오. 교육을 시작하면이 보상 함수가 S3의 파일에 저장되지만 안전하게 별도로 복사 및 저장하도록 합니다.
 
-Once you are done creating your reward function be sure to use the **Validate** button to verify that your code syntax is good before training begins. When you start training this reward function will be stored in a file in your S3, but also make sure you copy and store it somewhere to ensure it is safe.
-
-Here is my example reward function using the first example above.
+위의 첫 번째 예제를 사용한 보상 함수가 있습니다
 
 ![rewardfunction](img/reward_function.png)
 
-Please scroll to the next section.
+다음 섹션으로 스크롤 하세요. 
