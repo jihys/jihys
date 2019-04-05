@@ -19,7 +19,7 @@ Section 2에서 AWS DeepRacer League에 대한 자세한 내용을 제공 할 �
 
 -  실제 레이스 트랙은 Invent 2018 트랙 [Summit Circuit](https://aws.amazon.com/deepracer/summit-circuit/)이 될 것이므로 선택한 AWS Summit 중 어느 곳에서 경주를하려고한다면 re:Invent 트랙에서 모델을 훈련 시키십시오.
 
-- 버추얼 서킷은 매번 새로운 경기용 트랙이 생기며, 이 경기용 트랙을 직접 훈련 할 수는 없습니다. 대신 테마와 디자인이 매 경기 트랙과 동일하지는 않지만 유사합니다. 즉 자율 주행이 성공적이려면 모델이 일반화 되어야하며, 경기 트렉에 Overfitting해서는 않 됩니다.
+- 버추얼 서킷은 매번 새로운 경기용 트랙이 생기며, 이 경기용 트랙을 직접 훈련 할 수는 없습니다. 대신 테마와 디자인이 매 경기마다 동일하지는 않지만 유사합니다. 즉 자율 주행이 성공적이려면 모델이 일반화 되어야하며, 경기 트렉에 Overfitting해서는 않 됩니다.
 
 오늘의 Lab에서는 시간이 가능한 한 최대로 여러 분들이 Summit에서 레이스를 참가를 위해 준비 될 수 있도록 도와 드릴 예정입니다. Rre:Invent 2018 트랙을 선택하고 다음 섹션으로 스크롤하십시오.
 
@@ -46,14 +46,14 @@ Hints
 
 
 ## 3.4 Reward function
-In reinforcement learning, the reward function plays a **critical** role in training your models. The reward function is used to incentivize the driving behavior you want the agent to exhibit when using your trained RL model to make driving decisions. 
 
-The reward function evaluates the quality of an action's outcome, and reward the action accordingly. The reward is calculated in the simulation, during training, after each action is taken. You will provide the logic that goes into the reward function, using Python 3 syntax. In order to code this logic you have a number of measurements available from the simulation, exposed as variables.
+강화 학습에서는 보상 함수를 잘 설계하는 것이 이 모델 훈련에 **중요한 역할**을 합니다. 보상 함수는 훈련 된 RL 모델이 자율 주행을 할 때 우리가 원하는 바대로 행동 할 수 있도록 좋은 운전 행동을 장려하는 데 사용됩니다.
 
-The following list contains the variables you can use in your reward function. Note these are updated from time to time as our engineers and scientists find better ways of doing things, so adjust your previous reward functions accordingly. At the time of the Santa Clara workshop these variables and descriptions are correct in the AWS DeepRacer service in the AWS console. Thus please ignore the descriptions you may read in the AWS DeepRacer service, and make sure you use these variable names and descriptions. The most prominent difference is throttle and steering.
+보상 함수는 행동 결과의 품질을 평가하고 그에 따라 보상합니다. 보상은 훈련 중, 각 행동이 취해진 후에 시뮬레이션에서 계산됩니다. Python 3 구문을 사용하여 보상 함수에 들어갈 로직을 설계 합니다. 이 논리를 코드화 하기 위해 시뮬레이션에서 제공하는 여러 가지 측정 값을 변수로 사용 할 수 있습니다. 
 
+다음 목록에는 보상 함수에 사용할 수 있는 변수가 들어 있습니다. 저희 AWS가 자율 주향을 더 잘 수행 할 수있는 방법을 찾기 때문에 수시로 업데이트 됩니다. 따라서 보상 함수를 이에 따라 적절히 조정하십시오. Santa Clara 워크럇에서는 아래 변수와 설명은 현재 사용 가능한 AWS DeepRacer AWS 콘솔의 올바른 내용입니다. 따라서 AWS DeepRacer 서비스에서 볼 수 있는 설명을 무시하고 아래 변수 이름과 설명을 사용하십시오. 가장 두드러진 차이점은 Throttle과 Steering 입니다.
 
-| Variable Name        | Type                     | Description                                                                                                                                                                                                                                                                                         |
+| 변수 이름	            | 타입                     | 설명                                                                                                                                                                                                                                                                                         |
 |----------------------|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | on_track             | boolean                  | If any of the four wheels is on the track, track defined as the road surface and the border lines, then one_track is True. If all four wheels is off the track, then on_track is False. As soon as on_track is False the car will reset.                                                            |
 | x                    | Float                    | Returns the x coordinate of the center of the from axle of the car, in unit meters.                                                                                                                                                                                                                 |
