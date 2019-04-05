@@ -68,15 +68,15 @@ Hints
 | waypoints            | List                     | Ordered list of waypoints along the center of the track, each item containing the (x, y) coordinates of the waypoint. The list starts at zero                                                                                                                                                        |
 | closest_waypoint     | Integer                  | Index of the closest waypoint, as measured by straight-line distance. This waypoint can be behind or in-front of the car.                                                                                                                                                                           |
 
-보상 함수의 매개 변수에 대한 시각적 설명입니다.
+보상 함수의 매개 변수에 대한 그림입니다.
 
 ![rewardparams](img/reward_function_parameters_illustration.png)
 
-Here is a visualization of the waypoints used for the re:Invent track. You will only have access to the centerline waypoints in your reward function. Note also that you can recreate this graph by just printing the list of waypoints in your reward function and then plotting them. When you use a print function in your reward function, the output will be placed in the AWS RoboMaker logs. You can do this for any track you can train on. We will discuss logs later.
+아래는 re:Invent track 에서 사용 되는 waypoints에 대한 그림입니다. 보상 함수에서는 중심선 중간 지점의 waypoints만 사용 하실 수 있습니다. 보상 함수에 waypoints는 목록을 인쇄 한 다음 그래프에 Plot하여 그래프를 작성 할 수 있습니다. 보상 함수에서 인쇄 기능을 사용하면 출력이 AWS RoboMaker 로그에 저장됩니다. DeepRace에서 제공 되는 다른 트랙들도 동일하게 인쇄해 볼 수 있습니다. 로그들에 대해서는 다음에 논의 할 것입니다.
 
 ![waypoints](img/reinventtrack_waypoints.png)
 
-A useful method to come up with a reward function, is to think about the behavior you think a car that drives well will exhibit. A simple example would be to reward the car for staying on the road. This can be done by setting reward = 1, always. This will work in our simulator, because when the car goes off the track we reset it, and the car starts on the track again so we don't have to fear rewarding behavior that leads off the track. However, this is probably not the best reward function, because it completely ignores all other variables that can be used to craft a good reward function.
+보상 함수 설계하는 방법은, 자동차가 잘 운전 될거라 생각되는 행동에 대해 생각하는 것입니다. 간단한 예로 도로에 머무르는 차량에 대해 보상하는 것입니다. 이는 reward = 1 로 설정하는 할 수 있을 것입니다. 이 방식은 시뮬레이터에서 잘 동작을 할 것입니다. 왜냐하면 자동차가 트랙에서 벗어 났을 때 리셋하고 자동차가 원점에서 다시 시작하기 때문에,  트랙에서 벗어 낫을 경우 보상하는 것을 걱정 할 필요가 없기 때문입니다. 그러나 이것은 좋은 보상 기능을 만드는 데 사용할 수있는 다른 모든 변수를 완전히 무시하기 때문에 아마도 최상의 보상 기능은 아닐 것입니다.
 
 Below we provide a few reward function examples. 
 
