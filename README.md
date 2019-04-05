@@ -1,5 +1,5 @@
 ## Step 3: Create model
-이 페이지에서는 AWS DeepRacer용 RL 모델을 만들고 모델 교육을 시작하는 것을 배웁니다. 이 페이지는 몇 개의 섹션이 있습니다. LAB을 시작하기 앞서 먼저 스크롤 다운 하여 어떤 내용들이 있는지 확인해 봅니다. 여기서는 AWS DeepRacer 자동차가 스스로 트렉에서 자율 운행 하기 위해 사용 될 모델을 만들 것입니다. 그러기 위해서 제일 먼저 레이스 트랙을 선택하고, 모델이 선택 할 수 있는 행동을 정의하고, 원하는 운전 행동을 장려하기 위해 사용할 보상 함수을 디자인 하고, 훈련 중에 사용되는 하이퍼파라미터를 조정 할 것입니다. 
+이 페이지에서는 AWS DeepRacer용 RL 모델을 만들고 모델 교육을 시작하는 것을 배웁니다. 이 페이지는 몇 개의 섹션이 있습니다. LAB을 시작하기 앞서 먼저 스크롤 다운 하여 어떤 내용들이 있는지 확인해 봅니다. 여기서는 AWS DeepRacer 자동차가 스스로 트랙에서 자율 운행 하기 위해 사용 될 모델을 만들 것입니다. 그러기 위해서 제일 먼저 레이스 트랙을 선택하고, 모델이 선택 할 수 있는 행동을 정의하고, 원하는 운전 행동을 장려하기 위해 사용할 보상 함수을 디자인 하고, 훈련 중에 사용되는 하이퍼파라미터를 조정 할 것입니다. 
 
 ### <font color=blue>**Info**</font> **Buttons**
 콘솔 안에서 <font color=blue>**Info**</font>  해당 버튼을 누르면, information 창이 스크린 오른 쪽에서부터 앞으로 나타 나게 됩니다.  Info 창은 창 안에서 별도 링크를 선택하지 않는 한 그대로 오른편에 남아있게 됩니다. 내용을 다 읽으신 뒤에는 창을 닫을 수 있습니다.
@@ -19,23 +19,22 @@ Section 2에서 AWS DeepRacer League에 대한 자세한 내용을 제공 할 �
 
 -  [Summit Circuit](https://aws.amazon.com/deepracer/summit-circuit/),실제 레이스 트랙은 Invent 2018 트랙이 될 것이므로 선택한 AWS Summit 중 어느 곳에서 경주를하려고한다면 re:Invent 트랙에서 모델을 훈련 시키십시오.
 
-the live race track will be the re:Invent 2018 track, so train your model on the re:Invent track if you intend to race at any of the selected AWS Summits. 
-- Each race in the Virtual Circuit will have its own new competition track and it won't be possible to directly train on the competition tracks. Instead we will make a track available that will be similar in theme and design to each competition track, but not identical. This ensures that models have to generalize, and can't just be over fitted to the competition track. 
+- 버추얼 서킷의 매번 새로운 경기용 트랙이 생기며, 이 경기용 트랙을 직접 훈련 할 수는 없습니다. 대신 테마와 디자인이 매 경기 트랙과 동일하지는 않지만 유사하게 할 것입니다. 이렇게 하려면 모델이 일반화 되어야하며, 경기 트렉에 Overfitting해서는 않됩니다.
 
-For today's lab we want to get you ready to race at the Summit, time permitting, so please select the re:Invent 2018 track and scroll to the next section.
-
+오늘의 Lab에서는 시간이 가능한 한 최대로 여러 분들이 Summit에서 레이스를 참가를 위해 준비 될 수 있도록 도와 드릴 예정입니다. Rre:Invent 2018 트랙을 선택하고 다음 섹션으로 스크롤하십시오.
 
 ## 3.3 Action space
-In this section you get to configure the action space that your model will select from during training, and also once the model has been trained. An action is a combination of speed and steering angle. In AWS DeepRacer we are using a discrete action space as opposed to a continuous action space. To build this discrete action space you will specify the maximum speed, the speed granularity, the maximum steering angle, and the steering granularity.
+이 섹션에서는 훈련 과정 및 실 주행에서 선택 할 수 있는 Action Space를 정의합니다. Action은 자동차가 취할 수 있는 스피드와 조향각의 조합 입니다. 
+AWS DeepRacer에서는 Continuous Action Sapcerk 아닌 Discrete Acation space를 사용합니다. 이 Discrete Action Space를 정의하기 위해 최대 속도(Maximum Speed), 속도 레벨(Speed Levels), 최대 조향 각도(Maximum Steering Angle), 그리고 조향 레벨 (Steering Levels) 을 지정하게됩니다.
 
 ![action space](img/Action_Space.png)
 
 Inputs
 
-- Maximum steering angle is the maximum angle in degrees that the front wheels of the car can turn, to the left and to the right. There is a limit as to how far the wheels can turn and so the maximum turning angle is 30 degrees.
-- Steering levels refers to the number of steering intervals between the maximum steering angle on either side.  Thus if your maximum steering angle is 30 degrees, then +30 degrees is to the left and -30 degrees is to the right. With a steering granularity of 5, the following steering angles, from left to right, will be in the action space: 30 degrees, 15 degrees, 0 degrees, -15 degrees, and -30 degrees. Steering angles are always symmetrical around 0 degrees.
-- Maximum speeds refers to the maximum speed the car will drive in the simulator as measured in meters per second. 
-- Speed levels refers to the number of speed levels from the maximum speed (including) to zero (excluding). So if your maximum speed is 3 m/s and your speed granularity is 3, then your action space will contain speed settings of 1 m/s, 2m/s, and 3 m/s. Simply put 3m/s divide 3 = 1m/s, so go from 0m/s to 3m/s in increments of 1m/s. 0m/s is not included in the action space.
+- 최대 조향 각도는 차량의 앞 바퀴가 왼쪽과 오른쪽으로 회전 할 수있는 최대 각도입니다. 바퀴가 얼마나 멀리 회전 할 수 있는지에 대한 한계가 있으므로 최대 회전 각도는 30도입니다.
+- 조향 레벨은 양측의 최대 조향 각도 사이의 조향 간격의 수를 나타냅니다. 따라서 최대 조향 각도가 30 도인 경우 + 30 도가 왼쪽이고 -30 도가 오른쪽입니다. 조향 레벨이 5 인 경우 왼쪽에서 오른쪽 방향으로 30도, 15도, 0도, -15도 및 -30 도의 조향 각도가 동작 공간에 표시됩니다.  조향 각도은 언제나 0도를 기준으로 대칭입니다.
+- 최대 속도는 자동차가 시뮬레이터에서 운전할 최대 속도를 m/s 로 측정 한 것입니다.
+- 속도 레벨은 최대 속도(포함)에서 0까지의 속도 레벨의 개수를 나타냅니다. 따라서 최대 속도가 3m/s이고 속도 레벨이 3 인 경우 Action Space 에 1 m/s, 2m/s, and 3 m/s의 속도 설정이 포함됩니다. 간단히 3m/s 를 3으로 나누면 1m/s가 되고,  0m/s 에서 3m/s로 1m/s씩 증가합니다. 0m/s는 Action Space에 포함되지 않습니다.
 
 Based on the above example the final action space will include 15 discrete actions (3 speeds x 5 steering angles), that should be listed in the AWS DeepRacer service. If you haven't done so please configure your action space. Feel free to use what you want to use. Larger action spaces may take a bit longer to train.
 
