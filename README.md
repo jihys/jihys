@@ -72,17 +72,16 @@ Hints
 
 ![rewardparams](img/reward_function_parameters_illustration.png)
 
-아래는 re:Invent track 에서 사용 되는 waypoints에 대한 그림입니다. 보상 함수에서는 중심선 중간 지점의 waypoints만 사용 하실 수 있습니다. 보상 함수에 waypoints는 목록을 인쇄 한 다음 그래프에 Plot하여 그래프를 작성 할 수 있습니다. 보상 함수에서 인쇄 기능을 사용하면 출력이 AWS RoboMaker 로그에 저장됩니다. DeepRace에서 제공 되는 다른 트랙들도 동일하게 인쇄해 볼 수 있습니다. 로그들에 대해서는 다음에 논의 할 것입니다.
+아래는 re:Invent track 에서 사용 되는 waypoints에 대한 그림입니다. 보상 함수에서는 중심선 중간 지점의 waypoints만 사용 하실 수 있습니다. 보상 함수에 waypoints는 목록을 인쇄 한 다음 Plot하여 그래프를 작성 할 수 있습니다. 보상 함수에서 인쇄 기능을 사용하면 출력이 AWS RoboMaker 로그에 저장됩니다. DeepRace에서 제공 되는 다른 트랙들도 동일하게 인쇄해 볼 수 있습니다. 로그들에 대해서는 다음에 논의 할 것입니다.
 
 ![waypoints](img/reinventtrack_waypoints.png)
 
-보상 함수 설계하는 방법은, 자동차가 잘 운전 될거라 생각되는 행동에 대해 생각하는 것입니다. 간단한 예로 도로에 머무르는 차량에 대해 보상하는 것입니다. 이는 reward = 1 로 설정하는 할 수 있을 것입니다. 이 방식은 시뮬레이터에서 잘 동작을 할 것입니다. 왜냐하면 자동차가 트랙에서 벗어 났을 때 리셋하고 자동차가 원점에서 다시 시작하기 때문에,  트랙에서 벗어 낫을 경우 보상하는 것을 걱정 할 필요가 없기 때문입니다. 그러나 이것은 좋은 보상 기능을 만드는 데 사용할 수있는 다른 모든 변수를 완전히 무시하기 때문에 아마도 최상의 보상 기능은 아닐 것입니다.
+보상 함수 설계하는 방법은, 자동차가 잘 운전 될거라 생각되는 행동에 대해 생각하는 것입니다. 간단한 예로 도로에 머무르는 차량에 대해 보상하는 것입니다. 이는 reward = 1 로 설정하는 할 수 있을 것입니다. 이 방식은 시뮬레이터에서 잘 동작을 할 것입니다. 왜냐하면 자동차가 트랙에서 벗어 났을 때 리셋하고 자동차가 원점에서 다시 시작하기 때문에,  트랙에서 벗어 낫을 경우 보상하는 것을 걱정 할 필요가 없기 때문입니다. 그러나 이것은 좋은 보상 함수를 만드는 데 사용할 수있는 다른 모든 변수를 완전히 무시하기 때문에 아마도 최상의 보상 기능은 아닐 것입니다.
 
-Below we provide a few reward function examples. 
+아래에서는 보상 함수 몇 가지를 예제를 제공합니다.
 
-**Example 1**:Basic reward function that promotes centerline following.
-Here we first create three bands around the track, using the three markers, and then proceed to reward the car more for driving in the narrow band as opposed to the medium or the wide band. Also note the differences in the size of the reward. We provide a reward of 1 for staying in the narrow band, 0.5 for staying in the medium band, and 0.1 for staying in the wide band. If we decrease the reward for the narrow band, or increase the reward for the medium band, we are essentially incentivizing the car to be use a larger portion of the track surface. This could come in handy, especially when there are sharp corners.
-
+**Example 1**: 중심선을 따라가도록 장려하는 보상 함수. 
+여기에서는 먼저 3 개의 마커를 사용하여 트랙 주위에 3 개의 밴드를 만든 다음 중간 또는 넓은 밴드가 아닌 좁은 밴드에서 주행 했을 경우 더 많은 보상을 합니다. 보상의 크기 차이에 유의하십시오. 우리는 좁은 밴드에 머무를 때 1, 중간 밴드에 머무를 때 0.5, 넓은 밴드에 머무를 때 0.1의 보상을 제공합니다. 좁은 밴드에 대한 보상을 줄이거나 중간 대역에 대한 보상을 높이면 본질적으로 차량이 트랙의 넚은 면을 사용하도록 유도합니다. 이것은 특히 날카로운 모서리가있을 때 편리 할 수 있습니다.
 
 	def reward_function(on_track, x, y, distance_from_center, car_orientation, progress, steps, throttle, steering, track_width, waypoints, closest_waypoint):
 		marker_1 = 0.1 * track_width
